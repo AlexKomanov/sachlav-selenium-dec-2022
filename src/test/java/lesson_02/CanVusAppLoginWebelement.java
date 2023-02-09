@@ -3,9 +3,10 @@ package lesson_02;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class CanVusAppLogin {
+public class CanVusAppLoginWebelement {
     public static void main(String[] args) throws InterruptedException {
 
         WebDriverManager.chromedriver().setup();
@@ -16,26 +17,30 @@ public class CanVusAppLogin {
 
         driver.get("https://prd.canvusapps.com/login");
 
-        driver.findElement(By.id("email")).sendKeys("akoman@gmail.com");
+        WebElement emailInput = driver.findElement(By.id("email"));
+        emailInput.sendKeys("akoman@gmail.com");
         Thread.sleep(2000);
-        driver.findElement(By.id("email")).clear();
+        emailInput.clear();
         Thread.sleep(2000);
-        driver.findElement(By.id("email")).sendKeys("akoman@sachlav.com");
-        driver.findElement(By.name("password")).sendKeys("12345678");
-        driver.findElement(By.cssSelector("input[id='remember_me']")).click();
+        emailInput.sendKeys("akoman@sachlav.com");
 
-        String classAttribute = driver.findElement(By.cssSelector("[name='button']")).getAttribute("class");
-        System.out.println("classAttribute = " + classAttribute);
+        WebElement passwordInput = driver.findElement(By.name("password"));
+        passwordInput.sendKeys("12345678");
 
-        driver.findElement(By.cssSelector("[name='button']")).click();
+        WebElement rememberMeCheckbox = driver.findElement(By.cssSelector("input[id='remember_me']"));
+        rememberMeCheckbox.click();
+
+        WebElement loginButton = driver.findElement(By.cssSelector("[name='button']"));
+        System.out.println("loginButton.getAttribute(\"class\") = " + loginButton.getAttribute("class"));
+        loginButton.click();
 
         Thread.sleep(3000);
 
         String currentUrl = driver.getCurrentUrl();
 
         if (currentUrl.equals("https://prd.canvusapps.com/sessions")) {
-            String errorMessage = driver.findElement(By.cssSelector(".alert.alert-notice.alert-block.notice")).getText();
-            if (errorMessage.equals("Invalid email or password")) {
+            WebElement errorMessageElement = driver.findElement(By.cssSelector(".alert.alert-notice.alert-block.notice"));
+            if (errorMessageElement.getText().equals("Invalid email or password")) {
                 System.out.println("All tests are passed! :) ");
             }
             else {

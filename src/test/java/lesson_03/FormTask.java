@@ -5,11 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 public class FormTask {
 
     static WebDriver driver;
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -40,9 +41,40 @@ public class FormTask {
 
         clickElement(nextButton);
 
+        //Page 2
 
+        By advancedIcon = By.cssSelector("[id=\"Advanced\"]");
 
-        Thread.sleep(2000);
+        clickElement(advancedIcon);
+
+        sleep(1000);
+        clickElement(nextButton);
+
+        sleep(1000);
+
+        // Page 3
+
+        By streetName = By.cssSelector("[id=\"streetname\"]");
+        By streetNumber = By.cssSelector("[id=\"streetnumber\"]");
+        By city = By.cssSelector("[id=\"city\"]");
+        By countrySelectLocator = By.cssSelector("[id=\"country\"]");
+        By finishButton = By.cssSelector("[id=\"finish\"]");
+
+        typeText(streetName, "Nahal Dan");
+        typeText(streetNumber, "15");
+        typeText(city, "Karmiel");
+
+        Select countrySelectElement = new Select(driver.findElement(countrySelectLocator));
+
+        countrySelectElement.selectByIndex(0);
+        sleep(1000);
+        countrySelectElement.selectByVisibleText("Italy");
+        sleep(1000);
+        countrySelectElement.selectByValue("Israel");
+        sleep(1000);
+        clickElement(finishButton);
+
+       sleep(2000);
         driver.quit();
     }
 
@@ -66,5 +98,13 @@ public class FormTask {
     public static void clickElement(By selector) {
         WebElement element = driver.findElement(selector);
         element.click();
+    }
+
+    public static void sleep(int timeout)  {
+        try {
+            Thread.sleep(timeout);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
